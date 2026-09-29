@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NR Gate Entry — Boss UI</title>
+<style>
+:root{--blue:#0878f9;--blue2:#075fc7;--navy:#17212b;--bg:#eef1f5;--card:#fff;--soft:#e7e7e7;--green:#21a849;--red:#e5394b;--text:#111820;--muted:#69727c;--line:#d2d7dd}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+button,input,select,textarea{font:inherit}.app{max-width:1180px;margin:14px auto;background:#fff;border-radius:14px;box-shadow:0 4px 24px #0002;overflow:hidden;min-height:calc(100vh - 28px)}
+.top{background:#fff;padding:14px 18px 10px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px}
+.brand{display:flex;align-items:center;gap:11px}.logo{width:43px;height:43px;border-radius:9px;background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:800;font-size:15px}.brand h1{font-size:23px;margin:0}.brand small{color:var(--muted)}
+.topright{display:flex;align-items:center;gap:8px}.pill{padding:9px 13px;border-radius:7px;font-weight:700}.live{background:#d5f0dc;color:#176b31}.admin{background:#303942;color:#fff}
+.tabs{display:flex;gap:7px;padding:12px 18px;background:#fafafa;border-bottom:1px solid var(--line)}
+.tab{flex:1;border:1px solid #b9c5d1;background:#fff;color:#1265c4;padding:12px;border-radius:7px;font-weight:800;cursor:pointer}.tab.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+.page{padding:16px}.hidden{display:none}
+.banner{background:#d7f0dd;color:#176b31;border-radius:7px;padding:10px;text-align:center;margin-bottom:14px;font-weight:600}
+.layout{display:grid;grid-template-columns:1.55fr .85fr;gap:15px}
+.card{background:#fff;border:1px solid var(--line);border-radius:9px;padding:15px;box-shadow:0 1px 4px #0000000d}
+.card h2{margin:0 0 4px;font-size:20px}.sub{margin:0 0 14px;color:var(--muted);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}.full{grid-column:1/-1}
+label{display:block;font-size:12px;font-weight:800;margin-bottom:5px;color:#39434d}
+input,select,textarea{width:100%;border:1px solid #c8ced5;border-radius:7px;padding:11px 12px;background:#fff;color:#111}
+input[readonly]{background:#f2f4f6;color:#555;font-weight:700}
+textarea{resize:vertical}
+.actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-top:13px}
+.btn{border:0;border-radius:7px;padding:12px 10px;font-weight:800;cursor:pointer}.primary{background:var(--blue);color:#fff}.success{background:var(--green);color:#fff}.danger{background:var(--red);color:#fff}.neutral{background:#e9ecef;color:#111}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{background:var(--soft);border-radius:9px;padding:14px;text-align:center}.stat span{display:block;color:#555;font-size:12px;font-weight:700}.stat b{display:block;font-size:28px;margin-top:4px}
+.quick{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:11px}.quick button{min-height:66px;border:1px solid #c6cbd0;border-radius:8px;background:#eee;font-weight:800;cursor:pointer}.quick button:hover{background:#e1e4e7}
+.searchbar{display:flex;gap:9px;margin-bottom:12px}.searchbar input{flex:1}.searchbar select{max-width:150px}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:8px}table{border-collapse:collapse;width:100%;min-width:850px}th,td{padding:10px 11px;border-bottom:1px solid #e0e3e6;text-align:left;font-size:13px;white-space:nowrap}th{background:#f0f2f4;color:#4c5660}tr:hover td{background:#fafafa}
+.badge{display:inline-block;padding:4px 9px;border-radius:20px;background:#d7f0dd;color:#176b31;font-size:11px;font-weight:800}.badge.out{background:#e5e7e9;color:#555}
+.empty{text-align:center;color:#777;padding:30px}
+.reportgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:14px}
+.err{border-color:var(--red)!important}.msg{color:var(--red);font-size:11px;margin-top:3px;min-height:14px}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#18232e;color:#fff;padding:11px 17px;border-radius:8px;opacity:0;pointer-events:none;transition:.2s;z-index:20}.toast.show{opacity:1}
+.print-only{display:none}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.reportgrid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.app{margin:0;border-radius:0}.top{align-items:flex-start}.topright{display:none}.tabs{padding:8px}.tab{padding:10px 5px;font-size:12px}.page{padding:10px}.grid{grid-template-columns:1fr}.actions{grid-template-columns:1fr}.reportgrid{grid-template-columns:1fr 1fr}}
+@media print{body{background:#fff}.app{box-shadow:none;margin:0}.top,.tabs,.no-print{display:none!important}.page{padding:0}.print-only{display:block}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top">
+  <div class="brand"><div class="logo">NR</div><div><h1>NR GATE ENTRY</h1><small>Visitor & Vehicle Management</small></div></div>
+  <div class="topright"><span class="pill live">● SYSTEM READY</span><span class="pill admin">Admin</span></div>
+</header>
+
+<nav class="tabs no-print">
+  <button class="tab active" data-page="entry" onclick="showPage('entry')">GATE ENTRY</button>
+  <button class="tab" data-page="records" onclick="showPage('records')">RECORDS</button>
+  <button class="tab" data-page="report" onclick="showPage('report')">DAILY REPORT</button>
+</nav>
+
+<main>
+<section id="entry" class="page">
+  <div class="banner" id="ready">NR Gate Entry System Ready</div>
+  <div class="layout">
+    <div class="card">
+      <h2>New Gate Entry</h2><p class="sub">Fast entry for security desk</p>
+      <div class="grid">
+        <div><label>ENTRY NO.</label><input id="entryNo" readonly></div>
+        <div><label>DATE / TIME</label><input id="dateTime" readonly></div>
+        <div><label>VISITOR NAME *</label><input id="name" placeholder="Enter visitor name"><div class="msg" id="nameM"></div></div>
+        <div><label>MOBILE NUMBER</label><input id="mobile" inputmode="numeric" maxlength="11" placeholder="01XXXXXXXXX"><div class="msg" id="mobileM"></div></div>
+        <div><label>PERSON TO MEET</label><input id="meet" placeholder="Name / Department"></div>
+        <div><label>PURPOSE</label><select id="purpose"><option>Meeting</option><option>Delivery</option><option>Official Work</option><option>Interview</option><option>Other</option></select></div>
+        <div><label>VEHICLE TYPE</label><select id="vehicleType"><option>None</option><option>Motorcycle</option><option>Car</option><option>Microbus</option><option>Truck</option><option>Other</option></select></div>
+        <div><label>VEHICLE NUMBER</label><input id="vehicle" placeholder="DHAKA-METRO-XX-XXXX"><div class="msg" id="vehicleM"></div></div>
+        <div class="full"><label>ADDRESS / REMARKS</label><textarea id="remarks" rows="2" placeholder="Optional"></textarea></div>
+      </div>
+      <div class="actions">
+        <button class="btn primary" onclick="saveEntry(false)">SAVE ENTRY</button>
+        <button class="btn success" onclick="saveEntry(true)">SAVE & PRINT</button>
+        <button class="btn neutral" onclick="clearForm()">CLEAR</button>
+      </div>
+    </div>
+
+    <aside>
+      <div class="card">
+        <h2>Today Overview</h2><p class="sub">Live gate status</p>
+        <div class="stats">
+          <div class="stat"><span>TODAY'S ENTRY</span><b id="sToday">0</b></div>
+          <div class="stat"><span>INSIDE NOW</span><b id="sInside">0</b></div>
+          <div class="stat"><span>EXITED</span><b id="sOut">0</b></div>
+          <div class="stat"><span>VEHICLES</span><b id="sVehicles">0</b></div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:12px">
+        <h2>Quick Actions</h2>
+        <div class="quick">
+          <button onclick="focusName()">➕<br>New Entry</button>
+          <button onclick="showPage('records')">📋<br>Records</button>
+          <button onclick="showPage('report')">📊<br>Report</button>
+          <button onclick="window.print()">🖨️<br>Print</button>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section id="records" class="page hidden">
+  <div class="card">
+    <h2>Gate Records</h2><p class="sub">Search visitors and manage IN / OUT status</p>
+    <div class="searchbar no-print"><input id="search" oninput="render()" placeholder="Search entry, name, mobile or vehicle..."><select id="filter" onchange="render()"><option value="ALL">All</option><option value="INSIDE">Inside</option><option value="OUT">Exited</option></select></div>
+    <div class="tablewrap"><table><thead><tr><th>ENTRY</th><th>DATE</th><th>VISITOR</th><th>MOBILE</th><th>VEHICLE</th><th>IN</th><th>OUT</th><th>STATUS</th><th class="no-print">ACTION</th></tr></thead><tbody id="tbody"></tbody></table></div>
+  </div>
+</section>
+
+<section id="report" class="page hidden">
+  <div class="card">
+    <h2>Daily Report</h2><p class="sub">Daily collection of gate activity</p>
+    <div class="searchbar no-print"><label style="align-self:center">DATE</label><input id="rDate" type="date" onchange="render()"><button class="btn primary" onclick="printReport()">PRINT REPORT</button><button class="btn neutral" onclick="exportCSV()">EXPORT CSV</button></div>
+    <h3 class="print-only">NR GATE ENTRY — DAILY REPORT <span id="pDate"></span></h3>
+    <div class="reportgrid">
+      <div class="stat"><span>TOTAL ENTRIES</span><b id="rTotal">0</b></div>
+      <div class="stat"><span>STILL INSIDE</span><b id="rInside">0</b></div>
+      <div class="stat"><span>EXITED</span><b id="rOut">0</b></div>
+      <div class="stat"><span>VEHICLES</span><b id="rVehicles">0</b></div>
+    </div>
+    <div class="tablewrap"><table><thead><tr><th>ENTRY</th><th>VISITOR</th><th>MEETING</th><th>PURPOSE</th><th>VEHICLE</th><th>IN</th><th>OUT</th></tr></thead><tbody id="rBody"></tbody></table></div>
+  </div>
+</section>
+</main>
+</div>
+<div id="toast" class="toast"></div>
+
+<script>
+const $=id=>document.getElementById(id), KEY='nr_gate_records';
+let records=[]; try{records=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){records=[]}
+const pad=n=>String(n).padStart(2,'0');
+function persist(){localStorage.setItem(KEY,JSON.stringify(records))}
+function now(){let d=new Date();return {date:`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`,time:`${pad(d.getHours())}:${pad(d.getMinutes())}`,display:d.toLocaleString()}}
+function nextNo(){let m=records.reduce((x,r)=>Math.max(x,parseInt(String(r.entryNo||'').replace(/\D/g,''))||0),0);return 'GE-'+String(m+1).padStart(5,'0')}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function fmt(t){if(!t)return '-';let [h,m]=t.split(':').map(Number);return `${pad(h%12||12)}:${pad(m)} ${h<12?'AM':'PM'}`}
+function toast(s){let e=$('toast');e.textContent=s;e.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('show'),2200)}
+function showPage(id){document.querySelectorAll('.page').forEach(x=>x.classList.add('hidden'));$(id).classList.remove('hidden');document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.page===id));render()}
+function focusName(){showPage('entry');setTimeout(()=>$('name').focus(),50)}
+function clearForm(){['name','mobile','meet','vehicle','remarks'].forEach(x=>$(x).value='');$('purpose').selectedIndex=0;$('vehicleType').selectedIndex=0;$('entryNo').value=nextNo();$('dateTime').value=now().display}
+function setErr(id,msg){$(id).classList.toggle('err',!!msg);$(id+'M').textContent=msg||''}
+function validate(){let ok=true,n=$('name').value.trim(),m=$('mobile').value.trim(),v=$('vehicle').value.trim().toUpperCase();setErr('name',n?'':'Visitor name required');if(!n)ok=false;let bad=m&&!/^01\d{9}$/.test(m);setErr('mobile',bad?'Enter valid 11-digit mobile':'');if(bad)ok=false;let dup=v&&records.some(r=>r.status==='INSIDE'&&(r.vehicle||'').toUpperCase()===v);setErr('vehicle',dup?'Vehicle already inside':'');if(dup)ok=false;return ok}
+function saveEntry(print){if(!validate())return;let n=now();let r={entryNo:$('entryNo').value,date:n.date,time:n.time,name:$('name').value.trim(),mobile:$('mobile').value.trim(),meet:$('meet').value.trim(),purpose:$('purpose').value,vehicleType:$('vehicleType').value,vehicle:$('vehicle').value.trim(),remarks:$('remarks').value.trim(),outTime:'',status:'INSIDE'};records.unshift(r);persist();toast(r.entryNo+' saved');if(print)printPass(r);clearForm();render()}
+function exitEntry(no){let r=records.find(x=>x.entryNo===no);if(r){r.status='OUT';r.outTime=now().time;persist();toast(r.name+' marked OUT');render()}}
+function printPass(r){let w=window.open('','_blank','width=400,height=650');if(!w){toast('Allow popups for printing');return}w.document.write(`<html><head><title>${esc(r.entryNo)}</title><style>body{font-family:Arial;width:300px;margin:18px auto;color:#000}.head{text-align:center;border-bottom:2px solid #000;padding-bottom:8px}.head b{font-size:20px}.no{text-align:center;font-size:25px;font-weight:bold;margin:12px}table{width:100%;border-collapse:collapse}td{padding:6px 0;border-bottom:1px dotted #999;font-size:13px}td:first-child{font-weight:bold;width:90px}.sig{display:flex;justify-content:space-between;margin-top:40px;font-size:11px}.sig span{border-top:1px solid #000;width:45%;text-align:center;padding-top:4px}button{display:block;margin:18px auto;padding:9px 18px}@media print{button{display:none}}</style></head><body><div class="head"><b>NR GATE PASS</b><div>Visitor Entry Pass</div></div><div class="no">${esc(r.entryNo)}</div><table><tr><td>Date</td><td>${r.date}</td></tr><tr><td>Time</td><td>${fmt(r.time)}</td></tr><tr><td>Visitor</td><td>${esc(r.name)}</td></tr><tr><td>Mobile</td><td>${esc(r.mobile||'-')}</td></tr><tr><td>Meet</td><td>${esc(r.meet||'-')}</td></tr><tr><td>Purpose</td><td>${esc(r.purpose)}</td></tr><tr><td>Vehicle</td><td>${esc(r.vehicle||'-')}</td></tr></table><div class="sig"><span>Visitor</span><span>Security</span></div><button onclick="print()">PRINT</button></body></html>`);w.document.close()}
+function render(){
+ let q=($('search')?.value||'').toLowerCase(),f=$('filter')?.value||'ALL';
+ let rows=records.filter(r=>(f==='ALL'||r.status===f)&&Object.values(r).join(' ').toLowerCase().includes(q));
+ $('tbody').innerHTML=rows.length?rows.map(r=>`<tr><td><b>${esc(r.entryNo)}</b></td><td>${r.date}</td><td>${esc(r.name)}</td><td>${esc(r.mobile||'-')}</td><td>${esc(r.vehicle||'-')}</td><td>${fmt(r.time)}</td><td>${fmt(r.outTime)}</td><td><span class="badge ${r.status==='OUT'?'out':''}">${r.status==='OUT'?'EXITED':'INSIDE'}</span></td><td class="no-print">${r.status==='INSIDE'?`<button class="btn danger" onclick="exitEntry('${r.entryNo}')">MARK OUT</button>`:`<button class="btn neutral" onclick="printPass(records.find(x=>x.entryNo==='${r.entryNo}'))">PASS</button>`}</td></tr>`).join(''):`<tr><td colspan="9" class="empty">No records found</td></tr>`;
+ let d=now().date,today=records.filter(r=>r.date===d);$('sToday').textContent=today.length;$('sInside').textContent=records.filter(r=>r.status==='INSIDE').length;$('sOut').textContent=today.filter(r=>r.status==='OUT').length;$('sVehicles').textContent=today.filter(r=>r.vehicle).length;
+ let rd=$('rDate')?.value||d,rr=records.filter(r=>r.date===rd);$('pDate').textContent=rd;$('rTotal').textContent=rr.length;$('rInside').textContent=rr.filter(r=>r.status==='INSIDE').length;$('rOut').textContent=rr.filter(r=>r.status==='OUT').length;$('rVehicles').textContent=rr.filter(r=>r.vehicle).length;
+ $('rBody').innerHTML=rr.length?rr.map(r=>`<tr><td>${r.entryNo}</td><td>${esc(r.name)}</td><td>${esc(r.meet||'-')}</td><td>${esc(r.purpose)}</td><td>${esc(r.vehicle||'-')}</td><td>${fmt(r.time)}</td><td>${r.status==='OUT'?fmt(r.outTime):'Inside'}</td></tr>`).join(''):`<tr><td colspan="7" class="empty">No entries for this date</td></tr>`;
+}
+function printReport(){
+  const d=$('rDate').value||now().date;
+  const list=records.filter(r=>r.date===d);
+  const inside=list.filter(r=>r.status==='INSIDE').length;
+  const vehicles=list.filter(r=>r.vehicle).length;
+  const rows=list.length ? list.map((r,i)=>`
+    <tr>
+      <td>${i+1}</td><td>${esc(r.entryNo)}</td><td>${esc(r.name)}</td>
+      <td>${esc(r.mobile||'-')}</td><td>${esc(r.meet||'-')}</td>
+      <td>${esc(r.purpose)}</td><td>${esc(r.vehicle||'-')}</td>
+      <td>${fmt(r.time)}</td><td>${r.status==='OUT'?fmt(r.outTime):'INSIDE'}</td>
+    </tr>`).join('') :
+    '<tr><td colspan="9" style="text-align:center;padding:25px">No entries for this date.</td></tr>';
+
+  const w=window.open('','_blank','width=1000,height=750');
+  if(!w){toast('Please allow pop-ups for Print Report');return}
+
+  w.document.write(`<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>NR Gate Entry Report - ${esc(d)}</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;margin:25px;color:#111}
+h1{margin:0;font-size:23px}p{margin:5px 0 18px;color:#555}
+.summary{display:flex;gap:35px;margin-bottom:18px}
+.summary div{border:1px solid #bbb;padding:10px 18px;border-radius:6px}
+.summary b{display:block;font-size:22px}
+table{width:100%;border-collapse:collapse}
+th,td{border:1px solid #999;padding:7px 8px;font-size:12px;text-align:left}
+th{background:#eee}
+.footer{display:flex;justify-content:space-between;margin-top:65px}
+.sign{width:190px;text-align:center;border-top:1px solid #111;padding-top:5px;font-size:12px}
+.printbtn{padding:9px 20px;margin-bottom:15px;cursor:pointer}
+@media print{.printbtn{display:none}}
+</style></head><body>
+<button class="printbtn" onclick="window.print()">PRINT</button>
+<h1>NR GATE ENTRY — DAILY REPORT</h1>
+<p>Date: ${esc(d)}</p>
+<div class="summary">
+<div><b>${list.length}</b>Total Entries</div>
+<div><b>${inside}</b>Still Inside</div>
+<div><b>${list.length-inside}</b>Exited</div>
+<div><b>${vehicles}</b>Vehicles</div>
+</div>
+<table>
+<thead><tr><th>#</th><th>Entry</th><th>Visitor</th><th>Mobile</th><th>Meeting</th><th>Purpose</th><th>Vehicle</th><th>In</th><th>Out</th></tr></thead>
+<tbody>${rows}</tbody>
+</table>
+<div class="footer"><div class="sign">Prepared By</div><div class="sign">Security In-charge</div></div>
+</body></html>`);
+  w.document.close();
+  w.focus();
+}
+function exportCSV(){let d=$('rDate').value||now().date,rs=records.filter(r=>r.date===d);if(!rs.length){toast('No records to export');return}let a=document.createElement('a'),rows=[['Entry No','Date','Time In','Name','Mobile','Meeting','Purpose','Vehicle Type','Vehicle','Status','Time Out'],...rs.map(r=>[r.entryNo,r.date,r.time,r.name,r.mobile,r.meet,r.purpose,r.vehicleType,r.vehicle,r.status,r.outTime])];let csv='\ufeff'+rows.map(x=>x.map(v=>`"${String(v??'').replace(/"/g,'""')}"`).join(',')).join('\r\n');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='nr-gate-entry-'+d+'.csv';a.click()}
+function init(){$('rDate').value=now().date;clearForm();render();setInterval(()=>{$('dateTime').value=now().display},1000)}
+init();
+</script>
+</body>
+</html>
